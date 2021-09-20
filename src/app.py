@@ -3,7 +3,7 @@ import string
 import json
 from random import choice
 from hashids import Hashids
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, request
 
 
 def get_db_cursorection():
@@ -20,20 +20,21 @@ hashids = Hashids(min_length=4, salt=app.config['SECRET_KEY'])
 
 def response(body = {}, error = '', msg = ''):
         resp = {
-                'body': body,
+                'short_url': body,
                 'error': error,
                 'msg': msg
         }
         return json.dumps(resp)
 
-@app.route('/url/<string:url>', methods=('POST',))
-def index(url):
+@app.route('/url', methods=('POST',))
+def index():
     conn = get_db_cursorection()
     cursor=conn.cursor()
 
-    if request.method == 'POST':
+    if request.is_json:
         short_url = ''
-
+        json_data = request.get_json()
+        url = json_data['url']
         cursor.execute('SELECT id FROM urls WHERE original_url = (?)', (url,))
         data = cursor.fetchone()
         if data is None:
