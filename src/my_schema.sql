@@ -3,6 +3,13 @@ DROP TABLE IF EXISTS urls;
 CREATE TABLE urls (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    original_url TEXT NOT NULL,
-    hash_id TEXT NOT NULL
+    original_url TEXT NOT NULL
+);
+
+DROP TABLE IF EXISTS hash_table;
+
+CREATE TABLE hash_table (
+    hash_id TEXT NOT NULL,
+    url_id INTEGER NOT NULL,
+    FOREIGN KEY (url_id) REFERENCES urls(id)
 );
