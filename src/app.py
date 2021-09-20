@@ -5,6 +5,12 @@ from random import choice
 from hashids import Hashids
 from flask import Flask, request
 
+'''
+Logic: Add new URLs in 'urls' table and use its rowid to create a unique HASH.
+Save this HASH and ID(from urls table) of URL in a nwe table called 'hash_table' for future reference
+Used 'Hashids' library for generating unique and short url
+'''
+
 
 def get_db_cursorection():
     conn = sqlite3.connect('database.db')
@@ -12,12 +18,14 @@ def get_db_cursorection():
     return conn
 
 app = Flask(__name__)
+
+#### Initialize Hashids with a random secret key
 chars = string.ascii_letters
 random =  ''.join(choice(chars) for _ in range(4))
 app.config['SECRET_KEY'] = random
-
 hashids = Hashids(min_length=4, salt=app.config['SECRET_KEY'])
 
+## Format the result before sending it
 def response(body = {}, error = '', msg = ''):
         resp = {
                 'short_url': body,
