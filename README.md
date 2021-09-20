@@ -8,6 +8,7 @@ c) docker build -t url_shortner:latest ./
 ```
 
 **Run instructions:**
+
 a) Run the url_shortner app in the container
 `docker run -d -p 5000:5000  --name url_shortner_container url_shortner`
 b) Access the API using curl command:
